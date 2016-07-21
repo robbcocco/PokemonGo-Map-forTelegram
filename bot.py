@@ -14,36 +14,47 @@ $ python3.4 bot.py <token> <PTC username> <PTC password> <steps> <host> <port> <
 
 def handle(msg):
     flavor = telepot.flavor(msg)
-    command = msg['text']
     chat_id = msg['chat']['id']
+    command = msg['text']
+    sender = msg['from']
+    msg_date = msg['date']
+    actual_date = time.time()
 
     summary = telepot.glance(msg, flavor=flavor)
 
     if command.lower().startswith('/pokemap'):
         if command.count(' ') >= 1:
-            # saving the location into a variable
-            locTemp = command.split(' ', 1)
-            location = locTemp[1]
-            # running the shell command
-            os.system('python PokemonGo-Map-develop/runserver.py -a ptc -u %s -p %s -l "%s" -st %s -ol -dg -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
-            # let the map load a minute
-            bot.sendMessage(chat_id, 'Wait a minute...')
-            time.sleep(60)
-            # initializing the page
-            driver = webdriver.PhantomJS()
-            driver.set_window_size(1024, 1024)
-            driver.get('http://%s:%s' % (HOST, PORT))
-            # let the page load
-            time.sleep(5)
-            # save a screenshot
-            driver.save_screenshot('loc.png')
-            # kill the map
-            os.system('pkill -f runserver.py')
-            os.system('pkill -f node')
-            os.system('pkill -f phantomjs')
-            # send the screenshot
-            bot.sendChatAction(chat_id, 'upload_photo')
-            bot.sendPhoto(chat_id, open('loc.png', 'rb'), caption=location)
+            # printing info
+            print('Sender: ', sender)
+            print('Command: ', command)
+            print('Msg date: ', msg_date)
+            print('Act date: ', actual_date)
+            if msg_date+1 > actual_date:
+                # saving the location into a variable
+                locTemp = command.split(' ', 1)
+                location = locTemp[1]
+                # running the shell command
+                os.system('python PokemonGo-Map-develop/runserver.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
+                # let the map load a minute
+                bot.sendMessage(chat_id, 'Wait a minute...')
+                time.sleep(60)
+                # initializing the page
+                driver = webdriver.PhantomJS()
+                driver.set_window_size(1024, 1024)
+                driver.get('http://%s:%s' % (HOST, PORT))
+                # let the page load
+                time.sleep(5)
+                # save a screenshot
+                driver.save_screenshot('loc.png')
+                # kill the map
+                os.system('pkill -f runserver.py')
+                os.system('pkill -f node')
+                os.system('pkill -f phantomjs')
+                # send the screenshot
+                bot.sendChatAction(chat_id, 'upload_photo')
+                bot.sendPhoto(chat_id, open('loc.png', 'rb'), caption=location)
+            else:
+                bot.sendMessage(chat_id, 'I\'m now avaiable')
         else:
             bot.sendMessage(chat_id, 'Correct syntax is "/pokemap location"')
 
