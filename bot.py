@@ -25,7 +25,7 @@ def handle(msg):
             locTemp = command.split(' ', 1)
             location = locTemp[1]
             # running the shell command
-            os.system('python PokemonGo-Map-develop/runserver.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
+            os.system('python PokemonGo-Map-develop/runserver.py -a ptc -u %s -p %s -l "%s" -st %s -ol -dg -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
             # let the map load a minute
             bot.sendMessage(chat_id, 'Wait a minute...')
             time.sleep(60)
