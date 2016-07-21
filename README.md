@@ -27,13 +27,17 @@ apt-get install -y nodejs
 npm -g install phantomjs
 pip3.4 install selenium
 apt-get install -y unzip
+wget https://github.com/robbcocco/PokemonGo-Map-forTelegram/archive/master.zip
+unzip master.zip
+cd PokemonGo-Map-forTelegram-master/
 wget https://github.com/AHAAAAAAA/PokemonGo-Map/archive/develop.zip
 unzip develop.zip
-cd PkmnGo-Map-forTelegram-develop/
-add gmapkey to credentials.json
+cd PokemonGo-Map-develop/
+# add gmapkey to credentials.json
 pip2.7 install --upgrade -r requirements.txt
+cd ..
 ```
 
-Check [this page](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki/Google-Maps-API:-a-brief-guide-to-your-own-key) to get your gmaps api key.
+Check [this page](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki/Google-Maps-API:-a-brief-guide-to-your-own-key) to get your gmapkey.
 
 Run with `python3.4 bot.py <token> <PTC username> <PTC password> <steps> <host> <port>`
