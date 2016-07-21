@@ -1,7 +1,3 @@
-#[Official Website] (https://jz6.github.io/PoGoMap/)#
-
-##[PokemonGo Map](https://github.com/AHAAAAAAA/PokemonGo-Map/tree/develop)
-
 # PokemonGo Map for Telegram
 
 <p align="center">
@@ -10,10 +6,12 @@
 
 Live visualization of all the pokemon in your area. To use with a Telegram Bot. Request one [here](https://telegram.me/BotFather).
 
+[Official Website] (https://jz6.github.io/PoGoMap/)
+[Map repo](https://github.com/AHAAAAAAA/PokemonGo-Map/tree/develop)
 Bot using API from [nickoala's telepot](https://github.com/nickoala/telepot).
 
 ---
-#Instructions#
+##Instructions##
 
 ```
 apt-get update
