@@ -58,10 +58,10 @@ def handle(msg):
         else:
             bot.sendMessage(chat_id, 'Correct syntax is "/pokemap location"')
 
-    else if command.lower().startswith('/start'):
+    elif command.lower().startswith('/start'):
         bot.sendMessage(chat_id, 'Hi!')
 
-    else if command.lower().startswith('/help'):
+    elif command.lower().startswith('/help'):
         bot.sendMessage(chat_id,    'To get the map of a location with nearby Pokémon, just type\n' \
                                     '/pokemap followed by the desired location\n\n' \
                                     'Sources can be found here https://github.com/robbcocco/PokemonGo-Map-forTelegram', disable_web_page_preview=True)
