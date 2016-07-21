@@ -4,6 +4,10 @@
 
 # PokemonGo Map for Telegram
 
+<p align="center">
+<img src="http://i.imgur.com/L1YZQBq.jpg">
+</p>
+
 Live visualization of all the pokemon (with option to show gyms and pokestops) in your area. To use with a Telegram Bot. Request one [here](https://telegram.me/BotFather).
 
 Bot using API from [nickoala's telepot](https://github.com/nickoala/telepot).
