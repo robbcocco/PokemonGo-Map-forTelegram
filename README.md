@@ -37,11 +37,9 @@ cd PokemonGo-Map-forTelegram-master/
 wget https://github.com/AHAAAAAAA/PokemonGo-Map/archive/develop.zip
 unzip develop.zip
 cd PokemonGo-Map-develop/
-# add gmapkey to credentials.json
 pip2.7 install --upgrade -r requirements.txt
-cd ..
 ```
 
-Check [this page](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki/Google-Maps-API:-a-brief-guide-to-your-own-key) to get your gmapkey.
+Add your Google Maps API key to credentials.json. Check [this page](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki/Google-Maps-API:-a-brief-guide-to-your-own-key) to get your key.
 
-Run with `python3.4 bot.py <token> <PTC username> <PTC password> <steps> <host> <port>`
+Run from PokemonGo-Map-forTelegram/ with `python3.4 bot.py <token> <PTC username> <PTC password> <steps> <host> <port>`
