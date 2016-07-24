@@ -34,9 +34,9 @@ apt-get install -y unzip
 wget https://github.com/robbcocco/PokemonGo-Map-forTelegram/archive/master.zip
 unzip master.zip
 cd PokemonGo-Map-forTelegram-master/
-wget https://github.com/AHAAAAAAA/PokemonGo-Map/archive/master.zip
-unzip master.zip
-cd PokemonGo-Map-master/
+wget https://github.com/AHAAAAAAA/PokemonGo-Map/archive/V1.0.zip
+unzip V1.0.zip
+cd PokemonGo-Map-1.0/
 pip2.7 install --upgrade -r requirements.txt
 ```
 
