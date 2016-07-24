@@ -13,12 +13,12 @@ $ python3.4 bot.py <token> <PTC username> <PTC password> <steps> <host> <port> <
 """
 
 def handle(msg):
+    actual_date = time.time()
     flavor = telepot.flavor(msg)
     chat_id = msg['chat']['id']
     command = msg['text']
     sender = msg['from']
     msg_date = msg['date']
-    actual_date = time.time()
 
     summary = telepot.glance(msg, flavor=flavor)
 
@@ -36,7 +36,7 @@ def handle(msg):
                 location = locTemp[1]
                 # run the shell command
                 #os.system('python2.7 PokemonGo-Map-develop/runserver.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
-                os.system('python2.7 PokemonGo-Map-master/example.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
+                os.system('python2.7 PokemonGo-Map-1.0/example.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
                 # let the map load a minute
                 bot.sendMessage(chat_id, 'Wait a minute...')
                 time.sleep(60)
