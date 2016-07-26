@@ -31,9 +31,9 @@ apt-get install -y nodejs
 npm -g install phantomjs
 pip3.4 install selenium
 apt-get install -y unzip
-wget https://github.com/robbcocco/PokemonGo-Map-forTelegram/archive/master.zip
-unzip master.zip
-cd PokemonGo-Map-forTelegram-master/
+wget https://github.com/robbcocco/PokemonGo-Map-forTelegram/archive/traditional.zip
+unzip traditional.zip
+cd PokemonGo-Map-forTelegram-traditional/
 wget https://github.com/AHAAAAAAA/PokemonGo-Map/archive/V1.0.zip
 unzip V1.0.zip
 cd PokemonGo-Map-1.0/
