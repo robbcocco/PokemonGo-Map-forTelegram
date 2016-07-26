@@ -10,7 +10,7 @@ from selenium import webdriver
 
 """
 Run with
-python3.5 bota.py <token> <PTC username> <PTC password> <steps> <host> <port> <gmaps key>
+python3.5 bot.py <token> <PTC username> <PTC password> <steps> <host> <port> <gmaps key>
 
 """
 
