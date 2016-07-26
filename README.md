@@ -28,7 +28,6 @@ make install
 pip3.5 install telepot
 apt-get install -y python
 apt-get install -y python-setuptools
-pip3.5 install telepot
 wget https://bootstrap.pypa.io/get-pip.py
 python2.7 get-pip.py
 wget -qO- https://deb.nodesource.com/setup_6.x | bash -
