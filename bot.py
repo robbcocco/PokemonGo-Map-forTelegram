@@ -33,9 +33,9 @@ async def handle(msg):
                 location = locTemp[1]
                 # run the shell command
                 os.system('python2.7 PokemonGo-Map-1.0/example.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
-                # let the map load a minute
-                await bot.sendMessage(chat_id, 'Wait a minute...')
-                await asyncio.sleep(60)
+                # let the map load two minutes
+                await bot.sendMessage(chat_id, 'Wait two minutes...')
+                await asyncio.sleep(120)
                 # initialize the page
                 driver = webdriver.PhantomJS()
                 driver.set_window_size(512, 512)
