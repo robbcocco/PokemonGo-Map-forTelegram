@@ -41,7 +41,7 @@ async def handle(msg):
                 driver.set_window_size(512, 512)
                 driver.get('http://%s:%s' % (HOST, PORT))
                 # let the page load
-                await asyncio.sleep(3)
+                await asyncio.sleep(6)
                 # save a screenshot
                 driver.save_screenshot('loc.png')
                 # kill the map
