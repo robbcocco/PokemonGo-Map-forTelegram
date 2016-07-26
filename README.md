@@ -1,10 +1,10 @@
 # PokemonGo Map for Telegram
 
 <p align="center">
-<img src="http://i.imgur.com/L1YZQBq.jpg">
+<img src="https://raw.githubusercontent.com/robbcocco/PokemonGo-Map-forTelegram/master/cover.jpg">
 </p>
 
-Live visualization of all the pokemon in your area. To use with a Telegram Bot. Request one [here](https://telegram.me/BotFather).
+Live visualization of all the pokemon in your area. To use with a Telegram Bot. Request one [here](https://telegram.me/BotFather).  Try it [here](https://telegram.me/PkmnGoMapBot).
 
 [Official Website] (https://jz6.github.io/PoGoMap/)
 
