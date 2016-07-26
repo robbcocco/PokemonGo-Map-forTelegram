@@ -42,7 +42,7 @@ def handle(msg):
                 time.sleep(60)
                 # initialize the page
                 driver = webdriver.PhantomJS()
-                driver.set_window_size(1024, 1024)
+                driver.set_window_size(512, 512)
                 driver.get('http://%s:%s' % (HOST, PORT))
                 # let the page load
                 time.sleep(3)
