@@ -61,6 +61,13 @@ def handle(msg):
         else:
             bot.sendMessage(chat_id, 'Correct syntax is "/pokemap location"')
 
+    elif command.lower().startswith('/start'):
+        bot.sendMessage(chat_id, 'Hi! Try me with /pokemap')
+
+    elif command.lower().startswith('/help'):
+        bot.sendMessage(chat_id,    'To get the map of a location with nearby Pokémon, just type\n' \
+                                    '/pokemap followed by the desired location')
+
 
 TOKEN = sys.argv[1]  # get token from command-line
 
