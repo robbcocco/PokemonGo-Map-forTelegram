@@ -39,13 +39,13 @@ def handle(msg):
                 os.system('python2.7 PokemonGo-Map-1.0/example.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
                 # let the map load a minute
                 bot.sendMessage(chat_id, 'Wait a minute...')
-                time.sleep(60)
+                time.sleep(120)
                 # initialize the page
                 driver = webdriver.PhantomJS()
                 driver.set_window_size(512, 512)
                 driver.get('http://%s:%s' % (HOST, PORT))
                 # let the page load
-                time.sleep(3)
+                time.sleep(6)
                 # save a screenshot
                 driver.save_screenshot('loc.png')
                 # kill the map
