@@ -10,7 +10,7 @@ from selenium import webdriver
 
 """
 Run with
-python3.5 bota.py <token> <PTC username> <PTC password> <steps> <host> <port> <gmaps key>
+python3.5 bot.py <token> <PTC username> <PTC password> <steps> <host> <port> <gmaps key>
 
 """
 
@@ -43,7 +43,6 @@ async def handle(msg):
                     location = locTemp[1]
                     # run the shell command
                     os.system('python2.7 PokemonGo-Map-1.0/example.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
-                    #os.system('python2.7 PokemonGo-Map-develop/runserver.py -a ptc -u %s -p %s -l "%s" -fl -st %s -k %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, GKEY, HOST, PORT))
                     # let the map load a minute
                     await bot.sendMessage(chat_id, 'Wait two minutes...')
                     await asyncio.sleep(120)
@@ -57,7 +56,6 @@ async def handle(msg):
                     driver.save_screenshot('loc.png')
                     # kill the map
                     os.system('pkill -f example.py')
-                    #os.system('pkill -f runserver.py')
                     os.system('pkill -f python2.7')
                     os.system('pkill -f node')
                     os.system('pkill -f phantomjs')
