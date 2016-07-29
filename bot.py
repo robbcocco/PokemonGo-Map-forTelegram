@@ -69,7 +69,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
             driver.save_screenshot('loc.png')
             # terminate the map
             os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        except WebDriverException:
+        except:
             print('WebDriverException')
             await self.sender.sendMessage('Something went wrong, try again! :c')
         else:
