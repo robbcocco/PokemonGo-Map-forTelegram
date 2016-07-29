@@ -59,18 +59,23 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         await self.sender.sendMessage('Wait...')
         await asyncio.sleep(load_time)
         # initialize the page
-        driver = webdriver.PhantomJS()
-        driver.set_window_size(512, 512)
-        driver.get('http://%s:%s' % (run_args['host'], run_args['port']))
-        # let the page load
-        await asyncio.sleep(6)
-        # save a screenshot
-        driver.save_screenshot('loc.png')
-        # terminate the map
-        os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        # send the screenshot
-        await self.sender.sendChatAction('upload_photo')
-        await self.sender.sendPhoto(open('loc.png', 'rb'), caption=location+'\nispokemongodownornot.com')
+        try:
+            driver = webdriver.PhantomJS()
+            driver.set_window_size(512, 512)
+            driver.get('http://%s:%s' % (run_args['host'], run_args['port']))
+            # let the page load
+            await asyncio.sleep(6)
+            # save a screenshot
+            driver.save_screenshot('loc.png')
+            # terminate the map
+            os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+        except WebDriverException:
+            print('WebDriverException')
+            await self.sender.sendMessage('Something went wrong, try again! :c')
+        else:
+            # send the screenshot
+            await self.sender.sendChatAction('upload_photo')
+            await self.sender.sendPhoto(open('loc.png', 'rb'), caption=location+'\nispokemongodownornot.com')
         # set the server as free
         server_used = False
 
@@ -142,7 +147,7 @@ run_args = {
         'gkey' : sys.argv[7]
 }
 users = {}
-whitelist = [86731613, 83753345]  # add here your telegram id
+whitelist = []  # add here your telegram id
 wait_time = 600
 load_time = 120
 
