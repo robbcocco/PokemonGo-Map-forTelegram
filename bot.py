@@ -5,7 +5,10 @@ import telepot.aio
 import os
 import datetime
 import time
+import subprocess
+import signal
 
+from telepot.aio.delegate import per_chat_id, create_open
 from selenium import webdriver
 
 """
@@ -14,94 +17,135 @@ python3.5 bot.py <token> <PTC username> <PTC password> <steps> <host> <port> <gm
 
 """
 
-async def handle(msg):
-    global server_used
-    chat_id = msg['chat']['id']
-    command = msg['text']
-    sender = msg['from']
-    sender_id = msg['from']['id']
-    if command.lower().startswith('/pokemap'):
-        if command.count(' ') >= 1:
-            # initialize the set
-            if sender_id not in users:
-                users[sender_id] = 0
-            # print info
-            print('Sender: ', sender)
-            print('Command: ', command)
-            print('Actual time: ', time.time())
-            print('Latest use: ', users[sender_id])
-            # check if the user has used the server in the last 10 minutes
-            if time.time()-users[sender_id] > wait_time:
-                # check if the server is being used
-                if server_used is False:
-                    # set the server as occupied
-                    server_used = True
-                    # update the time when the user used the server
-                    users[sender_id] = time.time()
-                    # save the location into a variable
-                    locTemp = command.split(' ', 1)
-                    location = locTemp[1]
-                    # run the shell command
-                    os.system('python2.7 PokemonGo-Map-1.0/example.py -a ptc -u %s -p %s -l "%s" -st %s -H %s -P %s >mapstd.txt 2>maperr.txt &' % (USER, PASS, location, STEP, HOST, PORT))
-                    # let the map load a minute
-                    await bot.sendMessage(chat_id, 'Wait two minutes...')
-                    await asyncio.sleep(120)
-                    # initialize the page
-                    driver = webdriver.PhantomJS()
-                    driver.set_window_size(512, 512)
-                    driver.get('http://%s:%s' % (HOST, PORT))
-                    # let the page load
-                    await asyncio.sleep(6)
-                    # save a screenshot
-                    driver.save_screenshot('loc.png')
-                    # kill the map
-                    os.system('pkill -f example.py')
-                    os.system('pkill -f python2.7')
-                    os.system('pkill -f node')
-                    os.system('pkill -f phantomjs')
-                    # send the screenshot
-                    await bot.sendChatAction(chat_id, 'upload_photo')
-                    await bot.sendPhoto(chat_id, open('loc.png', 'rb'), caption=location)
-                    # set the server as free
-                    server_used = False
-                else:
-                    await bot.sendMessage(chat_id, 'Wait until i\'m avaiable')
-                    # wait until the server is free
-                    while(server_used is True):
-                        await asyncio.sleep(1)
-                    await bot.sendMessage(chat_id, 'I\'m now avaiable!')
+
+class PokeMap(telepot.aio.helper.ChatHandler):
+    def __init__(self, seed_tuple, timeout):
+        super(PokeMap, self).__init__(seed_tuple, timeout)
+
+    def print_info(self, msg):
+        # print info
+        print('Sender: ', msg['from'])
+        print('Command: ', msg['text'])
+        print('Actual time: ', time.time())
+        print('Msg time: ', msg['date'])
+        print('Latest use: ', users[msg['from']['id']])
+
+    async def run_server(self, msg, run_args):
+        # declare global variables
+        global server_used
+        # set the server as occupied
+        server_used = True
+        # update the time when the user used the server
+        users[msg['from']['id']] = time.time()
+        # save the location into a variable
+        locTemp = msg['text'].split(' ', 1)
+        location = locTemp[1]
+        # run the shell command
+        run_map = [
+                'python2.7', 'PokemonGo-Map-1.0/example.py',
+                '-a', 'ptc',
+                '-u', run_args['user'],
+                '-p', run_args['pass'],
+                '-l', "%s" % location,
+                '-st', run_args['step'],
+                '-H', run_args['host'],
+                '-P', run_args['port']
+        ]
+        with open('mapstd.txt', 'w') as mapstd:
+            with open('maperr.txt', 'w') as maperr:
+                process = subprocess.Popen(run_map, stdout=subprocess.PIPE, stderr=maperr, preexec_fn=os.setsid, bufsize=1, universal_newlines=True)
+        # let the map load
+        await self.sender.sendMessage('Wait...')
+        await asyncio.sleep(load_time)
+        # initialize the page
+        driver = webdriver.PhantomJS()
+        driver.set_window_size(512, 512)
+        driver.get('http://%s:%s' % (run_args['host'], run_args['port']))
+        # let the page load
+        await asyncio.sleep(6)
+        # save a screenshot
+        driver.save_screenshot('loc.png')
+        # terminate the map
+        os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+        process.kill()
+        # send the screenshot
+        await self.sender.sendChatAction('upload_photo')
+        await self.sender.sendPhoto(open('loc.png', 'rb'), caption=location+'\nispokemongodownornot.com')
+        # set the server as free
+        server_used = False
+
+    async def wait_server(self, msg):
+        await self.sender.sendMessage('Wait until i\'m avaiable')
+        # wait until the server is free
+        while(server_used is True):
+            await asyncio.sleep(1)
+        await self.sender.sendMessage('I\'m now avaiable!')
+
+    async def wait_countdown(self, msg):
+        countdown = round(users[msg['from']['id']] + wait_time - time.time())
+        await self.sender.sendMessage('Wait %s seconds until you can use me again' % str(countdown))
+        while (countdown > 0):
+            countdown = round(users[msg['from']['id']] + wait_time - time.time())
+            await asyncio.sleep(1)
+        await self.sender.sendMessage('You can now use me again!')
+
+
+    async def on_chat_message(self, msg):
+        if msg['text'].lower().startswith('/pokemap'):
+            if msg['text'].count(' ') >= 1:
+                # initialize the set
+                if msg['from']['id'] not in users:
+                    users[msg['from']['id']] = 0
+                self.print_info(msg)
+                # avoid old messages
+                if time.time()-msg['date'] < 15 or msg['from']['id'] in whitelist:
+                    # check if the user has used the server recently of if he is in the whitelist
+                    if time.time()-users[msg['from']['id']] > wait_time or msg['from']['id'] in whitelist:
+                        # check if the server is being used
+                        if server_used is False:
+                            # send the screenshot if there is a free server
+                            await self.run_server(msg, run_args)
+                        else:
+                            # else send a message when a server is unused
+                            await self.wait_server(msg)
+                    else:
+                        # else send a message when he can use it again
+                        await self.wait_countdown(msg)
             else:
-                countdown = str(round(users[sender_id] + wait_time - time.time()))
-                await bot.sendMessage(chat_id, 'Wait %s seconds until you can use me again' % countdown)
-        else:
-            await bot.sendMessage(chat_id, 'Correct syntax is "/pokemap location"')
-
-    elif command.lower().startswith('/start'):
-        await bot.sendMessage(chat_id, 'Hi! Try me with /pokemap')
-
-    elif command.lower().startswith('/help'):
-        await bot.sendMessage(chat_id,  'To get the map of a location with nearby Pokémon, just type\n' \
-                                        '/pokemap followed by the desired location')
+                await self.sender.sendMessage('Correct syntax is "/pokemap location"')
 
 
-# get arguments from command-line
-TOKEN = sys.argv[1]
-USER = sys.argv[2]
-PASS = sys.argv[3]
-STEP = sys.argv[4]
-HOST = sys.argv[5]
-PORT = sys.argv[6]
-GKEY = sys.argv[7]
+        elif msg['text'].lower().startswith('/start'):
+            await self.sender.sendMessage('Hi! Try me with /pokemap')
+
+        elif msg['text'].lower().startswith('/help'):
+            await self.sender.sendMessage(  'To get the map of a location with nearby Pokémon, just type\n' \
+                                            '/pokemap followed by the desired location')
+
+
+TOKEN = sys.argv[1]  # get token from command-line
 
 # global variables
 server_used = False
+run_args = {
+        'user' : sys.argv[2],
+        'pass' : sys.argv[3],
+        'step' : sys.argv[4],
+        'host' : sys.argv[5],
+        'port' : sys.argv[6],
+        'gkey' : sys.argv[7]
+}
 users = {}
+whitelist = []  # add here your telegram id
 wait_time = 600
+load_time = 120
 
-bot = telepot.aio.Bot(TOKEN)
+bot = telepot.aio.DelegatorBot(TOKEN, [
+    (per_chat_id(), create_open(PokeMap, timeout=3600)),
+])
+
 loop = asyncio.get_event_loop()
-
-loop.create_task(bot.message_loop(handle))
+loop.create_task(bot.message_loop())
 print('Listening ...')
 
 loop.run_forever()
