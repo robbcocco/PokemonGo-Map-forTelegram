@@ -31,6 +31,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         print('Latest use: ', users[msg['from']['id']])
 
     async def run_server(self, msg, run_args):
+        print('Result: run_server')
         # declare global variables
         global server_used
         # set the server as occupied
@@ -74,6 +75,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         server_used = False
 
     async def wait_server(self, msg):
+        print('Result: wait_server')
         await self.sender.sendMessage('Wait until i\'m avaiable')
         # wait until the server is free
         while(server_used is True):
@@ -81,6 +83,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         await self.sender.sendMessage('I\'m now avaiable!')
 
     async def wait_countdown(self, msg):
+        print('Result: wait_server')
         countdown = round(users[msg['from']['id']] + wait_time - time.time())
         await self.sender.sendMessage('Wait %s seconds until you can use me again' % str(countdown))
         while (countdown > 0):
@@ -122,6 +125,9 @@ class PokeMap(telepot.aio.helper.ChatHandler):
                 await self.sender.sendMessage(  'To get the map of a location with nearby Pokémon, just type\n' \
                                                 '/pokemap followed by the desired location')
 
+    async def on_edited_chat_message(self, msg):
+        pass
+
 
 TOKEN = sys.argv[1]  # get token from command-line
 
@@ -136,7 +142,7 @@ run_args = {
         'gkey' : sys.argv[7]
 }
 users = {}
-whitelist = []  # add here your telegram id
+whitelist = [86731613, 83753345]  # add here your telegram id
 wait_time = 600
 load_time = 120
 
