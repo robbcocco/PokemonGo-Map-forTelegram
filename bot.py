@@ -53,7 +53,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         ]
         with open('mapstd.txt', 'w') as mapstd:
             with open('maperr.txt', 'w') as maperr:
-                process = subprocess.Popen(run_map, stdout=subprocess.PIPE, stderr=maperr, preexec_fn=os.setsid, bufsize=1, universal_newlines=True)
+                process = subprocess.Popen(run_map, stdout=mapstd, stderr=maperr, preexec_fn=os.setsid)
         # let the map load
         await self.sender.sendMessage('Wait...')
         await asyncio.sleep(load_time)
