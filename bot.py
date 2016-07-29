@@ -67,7 +67,6 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         driver.save_screenshot('loc.png')
         # terminate the map
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        process.kill()
         # send the screenshot
         await self.sender.sendChatAction('upload_photo')
         await self.sender.sendPhoto(open('loc.png', 'rb'), caption=location+'\nispokemongodownornot.com')
@@ -91,36 +90,37 @@ class PokeMap(telepot.aio.helper.ChatHandler):
 
 
     async def on_chat_message(self, msg):
-        if msg['text'].lower().startswith('/pokemap'):
-            if msg['text'].count(' ') >= 1:
-                # initialize the set
-                if msg['from']['id'] not in users:
-                    users[msg['from']['id']] = 0
-                self.print_info(msg)
-                # avoid old messages
-                if time.time()-msg['date'] < 15 or msg['from']['id'] in whitelist:
-                    # check if the user has used the server recently of if he is in the whitelist
-                    if time.time()-users[msg['from']['id']] > wait_time or msg['from']['id'] in whitelist:
-                        # check if the server is being used
-                        if server_used is False:
-                            # send the screenshot if there is a free server
-                            await self.run_server(msg, run_args)
+        if 'text' in msg:
+            if msg['text'].lower().startswith('/pokemap'):
+                if msg['text'].count(' ') >= 1:
+                    # initialize the set
+                    if msg['from']['id'] not in users:
+                        users[msg['from']['id']] = 0
+                    self.print_info(msg)
+                    # avoid old messages
+                    if time.time()-msg['date'] < 15 or msg['from']['id'] in whitelist:
+                        # check if the user has used the server recently of if he is in the whitelist
+                        if time.time()-users[msg['from']['id']] > wait_time or msg['from']['id'] in whitelist:
+                            # check if the server is being used
+                            if server_used is False:
+                                # send the screenshot if there is a free server
+                                await self.run_server(msg, run_args)
+                            else:
+                                # else send a message when a server is unused
+                                await self.wait_server(msg)
                         else:
-                            # else send a message when a server is unused
-                            await self.wait_server(msg)
-                    else:
-                        # else send a message when he can use it again
-                        await self.wait_countdown(msg)
-            else:
-                await self.sender.sendMessage('Correct syntax is "/pokemap location"')
+                            # else send a message when he can use it again
+                            await self.wait_countdown(msg)
+                else:
+                    await self.sender.sendMessage('Correct syntax is "/pokemap location"')
 
 
-        elif msg['text'].lower().startswith('/start'):
-            await self.sender.sendMessage('Hi! Try me with /pokemap')
+            elif msg['text'].lower().startswith('/start'):
+                await self.sender.sendMessage('Hi! Try me with /pokemap')
 
-        elif msg['text'].lower().startswith('/help'):
-            await self.sender.sendMessage(  'To get the map of a location with nearby Pokémon, just type\n' \
-                                            '/pokemap followed by the desired location')
+            elif msg['text'].lower().startswith('/help'):
+                await self.sender.sendMessage(  'To get the map of a location with nearby Pokémon, just type\n' \
+                                                '/pokemap followed by the desired location')
 
 
 TOKEN = sys.argv[1]  # get token from command-line
