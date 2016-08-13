@@ -8,7 +8,7 @@ Live visualization of all the pokemon in your area. To use with a Telegram Bot. 
 
 [Official Website] (https://jz6.github.io/PoGoMap/)
 
-[Map repo](https://github.com/AHAAAAAAA/PokemonGo-Map/tree/develop)
+[Map repo](https://github.com/PokemonGoMap/PokemonGo-Map/tree/develop)
 
 Bot using API from [nickoala's telepot](https://github.com/nickoala/telepot).
 
@@ -38,12 +38,12 @@ apt-get install -y unzip
 wget https://github.com/robbcocco/PokemonGo-Map-forTelegram/archive/master.zip
 unzip master.zip
 cd PokemonGo-Map-forTelegram-master/
-wget https://github.com/AHAAAAAAA/PokemonGo-Map/archive/V1.0.zip
-unzip V1.0.zip
-cd PokemonGo-Map-1.0/
+wget https://github.com/PokemonGoMap/PokemonGo-Map/archive/V2.2.0.zip
+unzip V2.2.0.zip
+cd PokemonGo-Map-2.2.0/
 pip2.7 install --upgrade -r requirements.txt
 ```
 
-Add your Google Maps API key to credentials.json. Check [this page](https://github.com/AHAAAAAAA/PokemonGo-Map/wiki/Google-Maps-API:-a-brief-guide-to-your-own-key) to get your key.
+To get your Google Maps API key Check [this page](https://pgm.readthedocs.io/en/develop/basic-install/google-maps.html) to get your key.
 
-Run from PokemonGo-Map-forTelegram/ with `python3.5 bot.py <token> <PTC username> <PTC password> <steps> <host> <port>`
+Run from PokemonGo-Map-forTelegram/ with `python3.5 bot.py <TELEGRAM TOKEN> <PTC Username> <PTC Password> <Steps> <Host> <Port> <GMaps Key>`
