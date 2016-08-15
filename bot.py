@@ -43,7 +43,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         location = locTemp[1]
         # run the shell command
         run_map = [
-                'python2.7', 'PokemonGo-Map-2.2.0/runserver.py',
+                'python2.7', 'PokemonGo-Map-3.1.0/runserver.py',
                 '-a', 'ptc',
                 '-u', run_args['user'],
                 '-p', run_args['pass'],
