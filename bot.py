@@ -13,7 +13,7 @@ from selenium import webdriver
 
 """
 Run with
-python3.5 bot.py <token> <PTC username> <PTC password> <steps> <host> <port> <gmaps key>
+python3.5 bot.py <TELEGRAM TOKEN> <PTC Username> <PTC Password> <Steps> <Host> <Port> <GMaps Key>
 
 """
 
@@ -43,7 +43,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         location = locTemp[1]
         # run the shell command
         run_map = [
-                'python2.7', 'PokemonGo-Map-1.0/example.py',
+                'python2.7', 'PokemonGo-Map-3.1.0/runserver.py',
                 '-a', 'ptc',
                 '-u', run_args['user'],
                 '-p', run_args['pass'],
