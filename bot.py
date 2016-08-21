@@ -25,7 +25,10 @@ class PokeMap(telepot.aio.helper.ChatHandler):
     def print_info(self, msg):
         # print info
         print('Sender: ', msg['from'])
-        print('Command: ', msg['text'])
+        if('location' in msg):
+            print('Command: ', msg['location'])
+        else:    
+            print('Command: ', msg['text'])
         print('Actual time: ', time.time())
         print('Msg time: ', msg['date'])
         print('Latest use: ', users[msg['from']['id']])
@@ -39,8 +42,13 @@ class PokeMap(telepot.aio.helper.ChatHandler):
         # update the time when the user used the server
         users[msg['from']['id']] = time.time()
         # save the location into a variable
-        locTemp = msg['text'].split(' ', 1)
-        location = locTemp[1]
+        if 'location' in msg:
+            lattemp = msg['location']['latitude']
+            longtemp = msg['location']['longitude']
+            location = str(lattemp) +", "+ str(longtemp)
+        else:
+            locTemp = msg['text'].split(' ', 1)
+            location = locTemp[1]
         # run the shell command
         run_map = [
                 'python2.7', 'PokemonGo-Map-3.1.0/runserver.py',
@@ -98,9 +106,9 @@ class PokeMap(telepot.aio.helper.ChatHandler):
 
 
     async def on_chat_message(self, msg):
-        if 'text' in msg:
+        if ('text' in msg or 'location' in msg):
             if msg['text'].lower().startswith('/pokemap'):
-                if msg['text'].count(' ') >= 1:
+                if (msg['text'].count(' ') >= 1 or 'location' in msg):
                     # initialize the set
                     if msg['from']['id'] not in users:
                         users[msg['from']['id']] = 0
