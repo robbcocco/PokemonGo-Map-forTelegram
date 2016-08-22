@@ -107,8 +107,12 @@ class PokeMap(telepot.aio.helper.ChatHandler):
 
     async def on_chat_message(self, msg):
         if ('text' in msg or 'location' in msg):
-            if (msg['text'].lower().startswith('/pokemap') or 'location' in msg):
-                if (msg['text'].count(' ') >= 1 or 'location' in msg):
+            if('text' in msg):
+                text=msg['text']
+            else:
+                text='null'
+            if (text.lower().startswith('/pokemap') or 'location' in msg):
+                if (text.count(' ') >= 1 or 'location' in msg):
                     # initialize the set
                     if msg['from']['id'] not in users:
                         users[msg['from']['id']] = 0
@@ -137,6 +141,8 @@ class PokeMap(telepot.aio.helper.ChatHandler):
             elif msg['text'].lower().startswith('/help'):
                 await self.sender.sendMessage(  'To get the map of a location with nearby Pokémon, just type\n' \
                                                 '/pokemap followed by the desired location')
+            else:
+                print(msg)
 
     async def on_edited_chat_message(self, msg):
         pass
