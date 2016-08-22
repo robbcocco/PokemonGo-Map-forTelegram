@@ -141,8 +141,6 @@ class PokeMap(telepot.aio.helper.ChatHandler):
             elif msg['text'].lower().startswith('/help'):
                 await self.sender.sendMessage(  'To get the map of a location with nearby Pokémon, just type\n' \
                                                 '/pokemap followed by the desired location')
-            else:
-                print(msg)
 
     async def on_edited_chat_message(self, msg):
         pass
