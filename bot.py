@@ -107,7 +107,7 @@ class PokeMap(telepot.aio.helper.ChatHandler):
 
     async def on_chat_message(self, msg):
         if ('text' in msg or 'location' in msg):
-            if msg['text'].lower().startswith('/pokemap'):
+            if (msg['text'].lower().startswith('/pokemap') or 'location' in msg):
                 if (msg['text'].count(' ') >= 1 or 'location' in msg):
                     # initialize the set
                     if msg['from']['id'] not in users:
