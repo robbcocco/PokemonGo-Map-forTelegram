@@ -13,7 +13,7 @@ from selenium import webdriver
 
 """
 Run with
-python3.5 bot.py <TELEGRAM TOKEN> <PTC Username> <PTC Password> <Steps> <Host> <Port> <GMaps Key>
+python3.5 bot.py <TELEGRAM TOKEN> <PTC Username> <PTC Password> <Steps> <Host> <Port> <AIzaSyBMHT33XS-tS6heV7P2f4rM4IZE6h9KVXs >
 
 """
 
